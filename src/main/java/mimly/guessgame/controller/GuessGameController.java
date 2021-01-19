@@ -1,5 +1,6 @@
 package mimly.guessgame.controller;
 
+import inet.ipaddr.IPAddressString;
 import lombok.extern.slf4j.Slf4j;
 import mimly.guessgame.model.Guess;
 import mimly.guessgame.model.GuessGame;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -18,14 +20,18 @@ import javax.servlet.http.HttpSession;
 public class GuessGameController {
 
     private final GuessGame guessGame;
+    private final Map<String, IPAddressString> sessionIpMap;
 
     @Autowired
-    public GuessGameController(GuessGame guessGame) {
+    public GuessGameController(GuessGame guessGame, Map<String, IPAddressString> sessionIpMap) {
         this.guessGame = guessGame;
+        this.sessionIpMap = sessionIpMap;
     }
 
     @GetMapping("/invalidate")
     public String doInvalidateGet(HttpSession httpSession) {
+        String sessionId = httpSession.getId();
+        this.sessionIpMap.remove(sessionId);
         httpSession.invalidate();
         return "redirect:/";
     }

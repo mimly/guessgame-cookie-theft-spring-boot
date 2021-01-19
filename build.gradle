@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '2.3.5.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
-    id 'war'
 }
 
 group = 'mimly'
@@ -20,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.seancfoley:ipaddress:5.3.3'
     implementation 'org.apache.commons:commons-lang3'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -30,7 +30,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -41,10 +41,6 @@ test {
 }
 
 bootRun {
-    def console = System.console() != null
-    if (! console) { console = System.getenv()["TERM"].startsWith("xterm") }
-    if (console) {
-        systemProperties 'spring.output.ansi.enabled': 'always'
-        //systemProperties 'logging.pattern.console': '%clr(%d{yy-MM-dd E HH:mm:ss}) %clr(%-5p) %clr(>>) %clr(%m){faint}%n'
-    }
+    systemProperties 'spring.output.ansi.enabled': 'always'
+    //systemProperties 'logging.pattern.console': '%clr(%d{yy-MM-dd E HH:mm:ss}) %clr(%-5p) %clr(>>) %clr(%m){faint}%n'
 }
